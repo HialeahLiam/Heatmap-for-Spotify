@@ -1,0 +1,36 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+const meta = {
+  title: 'Pitch Heat Map',
+};
+
+const authorizeParams = {
+  client_id: import.meta.env.PUBLIC_SPOTIFY_CLIENT_ID,
+  response_type: 'code',
+  scope: import.meta.env.PUBLIC_SPOTIFY_SCOPES,
+  redirect_uri: `${import.meta.env.PUBLIC_DEV_URL}/spotifyAuthCallback`,
+};
+
+const searchParams = new URLSearchParams(authorizeParams);
+
+const spotifyAuthUrl = `https://accounts.spotify.com/authorize?${searchParams.toString()}`;
+console.log(spotifyAuthUrl);
+---
+
+<Layout {meta}>
+  <section>
+    <div class="text-center w-1/2 mx-auto min-h-screen">
+      <h1 class="text-7xl mb-4">Connect your Spotify</h1>
+      <p class="text-2xl px-10 mb-10">
+        We need to connect to your Spotify Premium account in order to play tracks and map their pitches.
+      </p>
+      <a
+        id="start-link"
+        href={spotifyAuthUrl}
+        class="text-lg text-green-600 border-green-900 border-solid border-2 py-2 px-5 rounded transition duration-300 hover:border-transparent hover:bg-green-900"
+        >Connect my Spotify</a
+      >
+    </div>
+  </section>
+</Layout>

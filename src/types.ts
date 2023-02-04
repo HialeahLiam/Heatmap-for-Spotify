@@ -36,3 +36,10 @@ export interface MetaSEO {
   ogTitle?: string;
   ogType?: string;
 }
+
+export interface SpotifyToken {
+  accessToken: string;
+  expiresIn?: number;
+  refreshToken: string;
+  expirationDate: number;
+}

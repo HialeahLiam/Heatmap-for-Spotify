@@ -1,0 +1,45 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+const nextPageUri = `${import.meta.env.PUBLIC_DEV_URL}/heatmap`;
+const spotifyRedirectUri = `${import.meta.env.PUBLIC_DEV_URL}/spotifyAuthCallback`;
+---
+
+<script>
+  import { SpotifyToken } from '~/types';
+  import { requestSpotifyToken, storeSpotifyTokenInBrowser } from '~/utils/auth';
+
+  const params = new URLSearchParams(window.location.search);
+
+  const topDiv = document.getElementById('topdiv') as HTMLElement;
+  const nextPageUri = topDiv.dataset.nextpageuri as string;
+  const spotifyRedirectUri = topDiv.dataset.spotifyredirecturi as string;
+
+  console.log(topDiv);
+  console.log(nextPageUri);
+
+  const error = params.get('error');
+  if (error) {
+    // handle authorization failure
+    console.log('spotify authorization failed!');
+  } else {
+    const code = params.get('code') as string;
+    // let token = await requestSpotifyToken(code, redirectUri);
+
+    const query = new URLSearchParams({ code, redirectUri: spotifyRedirectUri });
+
+    const response = await fetch(`${import.meta.env.PUBLIC_DEV_URL}/request-spotify-token?${query.toString()}`);
+    if (response.ok) {
+      storeSpotifyTokenInBrowser(await response.json());
+      window.location.replace(nextPageUri);
+    } else {
+      console.log('Spotify token request failed!');
+    }
+  }
+</script>
+
+<Layout>
+  <div id="topdiv" data-nextPageUri={nextPageUri} data-spotifyRedirectUri={spotifyRedirectUri}>
+    <h1>Logging into Spotify</h1>
+  </div>
+</Layout>
