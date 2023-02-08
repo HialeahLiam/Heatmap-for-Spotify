@@ -161,33 +161,44 @@ import { SITE } from '~/config.mjs';
 
     leftMovesFirst() {
       const container = this.querySelector('div');
-      const lineElements = container.children;
-      for (let i = 0; i < lineElements.length; i++) {
-        const line = lineElements[i];
-        const characterElements = line.children;
+      const characterElements = container.children;
 
-        for (let j = 0; j < characterElements.length; j++) {
-          const character = characterElements[j];
+      let positionInTextLine = 0;
+      let currentOffsetTop = 0;
+      for (let j = 0; j < characterElements.length; j++) {
+        const character = characterElements[j];
 
-          const delay = this.TRANSLATION_DELAY * j;
-          character.style = `transition-delay: ${delay}ms`;
+        if (currentOffsetTop < character.offsetTop) {
+          currentOffsetTop = character.offsetTop;
+          positionInTextLine = 0;
         }
+
+        const delay = this.TRANSLATION_DELAY * positionInTextLine;
+        character.style = `transition-delay: ${delay}ms`;
+
+        positionInTextLine++;
       }
     }
 
     rightMovesFirst() {
       const container = this.querySelector('div');
-      const lineElements = container.children;
-      for (let i = 0; i < lineElements.length; i++) {
-        const line = lineElements[i];
-        const characterElements = line.children;
+      const characterElements = container.children;
 
-        for (let j = 0; j < characterElements.length; j++) {
-          const character = characterElements[characterElements.length - 1 - j];
+      let n = characterElements.length;
+      let positionInTextLine = 0;
+      let currentOffsetTop = characterElements[n - 1].offsetTop;
+      for (let j = 0; j < n; j++) {
+        const character = characterElements[n - 1 - j];
 
-          const delay = this.TRANSLATION_DELAY * j;
-          character.style = `transition-delay: ${delay}ms`;
+        if (currentOffsetTop > character.offsetTop) {
+          currentOffsetTop = character.offsetTop;
+          positionInTextLine = 0;
         }
+
+        const delay = this.TRANSLATION_DELAY * positionInTextLine;
+        character.style = `transition-delay: ${delay}ms`;
+
+        positionInTextLine++;
       }
     }
 
@@ -204,29 +215,20 @@ import { SITE } from '~/config.mjs';
       container.className = 'text-7xl mb-4';
 
       container.append(
-        ...text.split('\n').map((line) => {
-          const lineContainer = document.createElement('div');
-          lineContainer.append(
-            ...line
-              .trim()
-              .split('')
-              .map((s, i) => {
-                // const delay = 50 * i;
+        ...text
+          .trim()
+          .split('')
+          .map((s, i) => {
+            // const delay = 50 * i;
 
-                const span = document.createElement('span');
-                span.className = ` floating-span w-fit inline-block whitespace-pre transition ease-in duration-300`;
-                // span.style = `transition-delay: ${delay}ms`;
-                span.innerText = s;
+            const span = document.createElement('span');
+            span.className = ` floating-span w-fit inline-block whitespace-pre transition ease-in duration-300`;
+            // span.style = `transition-delay: ${delay}ms`;
+            span.innerText = s;
 
-                return span;
-              })
-          );
-
-          return lineContainer;
-        })
+            return span;
+          })
       );
-
-      this.leftMovesFirst();
     }
   }
 
