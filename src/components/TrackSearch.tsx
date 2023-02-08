@@ -38,9 +38,9 @@ const TrackSearch = () => {
     setIsInputFocused(false);
   }
 
-  function handleTrackSelection(trackName: string) {
-    assignSelectedTrack(trackName);
-    setTrack(trackName);
+  function handleTrackSelection(track: TrackSearchItem) {
+    assignSelectedTrack(track.id);
+    setTrack(track.name);
   }
 
   const resultElements = results.map((item: TrackSearchItem) => {
@@ -48,7 +48,7 @@ const TrackSearch = () => {
       <div
         key={item.id}
         className="flex bg-white py-3 px-6 gap-3 cursor-pointer hover:shadow-[inset_0px_0px_50px_0px] hover:shadow-green-200"
-        onClick={() => handleTrackSelection(item.name)}
+        onClick={() => handleTrackSelection(item)}
       >
         <img
           className=" h-24 w-24"
@@ -69,7 +69,7 @@ const TrackSearch = () => {
   });
 
   return (
-    <div className="flex flex-col items-center ">
+    <div className="flex flex-col relative items-center">
       <input
         className=" text-black py-1 px-2 rounded focus:outline-none  focus:shadow-[inset_0px_0px_5px_2px] focus:shadow-green-400 mb-4"
         type="text"
@@ -82,7 +82,7 @@ const TrackSearch = () => {
       <div
         className={` ${
           resultsVisible ? 'max-h-80' : 'max-h-0'
-        }  overflow-scroll rounded mb-24 w-3/4 divide-y transition-[max-height] duration-300`}
+        } absolute z-20 top-10 overflow-scroll rounded w-3/4 divide-y transition-[max-height] duration-300`}
       >
         {resultElements}
       </div>

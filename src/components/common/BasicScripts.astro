@@ -208,7 +208,6 @@ import { SITE } from '~/config.mjs';
 
       this.className += ' whitespace-pre-wrap';
       const text = this.innerText;
-      console.log(text);
       this.innerText = null;
 
       this.appendChild(container);
@@ -232,6 +231,133 @@ import { SITE } from '~/config.mjs';
     }
   }
 
+  class PianoHeatMap extends HTMLElement {
+    WHITE_KEY_WIDTH = '4';
+    BLACK_KEY_WIDTH = '3';
+    WHITE_KEY_HEIGHT = '18';
+    BLACK_KEY_HEIGHT = '13';
+
+    classMap = {
+      0: ['shadow-red'],
+      100: ['shadow-red-100'],
+      200: ['shadow-red-200'],
+      300: ['shadow-red-300'],
+      400: ['shadow-red-400'],
+      500: ['shadow-red-500'],
+      600: ['shadow-red-600'],
+      700: ['shadow-red-700'],
+      800: ['shadow-red-800'],
+      900: ['shadow-red-900'],
+    }
+
+    pitchMap = [
+      {
+        id: "C",
+        class: this.classMap[0]
+      },
+      {
+        id: "C#",
+        class: this.classMap[0]
+      },
+      {
+        id: "D",
+        class: this.classMap[0]
+      },
+      {
+        id: "D#",
+        class: this.classMap[0]
+      },
+      {
+        id: "E",
+        class: this.classMap[0]
+      },
+      {
+        id: "F",
+        class: this.classMap[0]
+      },
+      {
+        id: "F#",
+        class: this.classMap[0]
+      },
+      {
+        id: "G",
+        class: this.classMap[0]
+      },
+      {
+        id: "G#",
+        class: this.classMap[0]
+      },
+      {
+        id: "A",
+        class: this.classMap[0]
+      },
+      {
+        id: "A#",
+        class: this.classMap[0]
+      },
+      {
+        id: "B",
+        class: this.classMap[0]
+      },
+    ]
+
+    updatePitches(pitches) {
+
+      pitches.forEach((p, i) => {
+        let rounded = Math.floor((p * 10)) * 100
+        if (rounded === 1000) rounded = 900
+
+        const key = document.getElementById(this.pitchMap[i].id)
+        key.classList.remove(this.pitchMap[i].class)
+        this.pitchMap[i].class = this.classMap[rounded]
+        key.classList.add(this.pitchMap[i].class)
+      })
+    }
+
+    constructor() {
+      super();
+
+      const containerElement = document.createElement('div');
+      this.appendChild(containerElement);
+      containerElement.className = 'flex relative  max-w-fit mx-auto';
+
+      const whiteKeyIds = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+      const blackKeyIds = ['C#', 'D#', null, 'F#', 'G#', 'A#'];
+
+      const whiteKeyElements = whiteKeyIds.map((id) => {
+        const containerKey = document.createElement('div');
+        containerKey.className = `relative bg-gray-700 border-x border-b border-white rounded-b-xl shadow-[inset_0px_0px_50px_10px]`;
+        containerKey.style = `width: ${this.WHITE_KEY_WIDTH}rem; height: ${this.WHITE_KEY_HEIGHT}rem`;
+        containerKey.id = id
+
+        // const key = document.createElement('div');
+        // key.className = 'absolute bg-red-200 inset-0 rounded-b-xl';
+        // containerKey.appendChild(key);
+        return containerKey;
+      });
+
+      const blackKeyElements = blackKeyIds.map((id, i) => {
+        const key = document.createElement('div');
+        if (id) {
+          key.className =
+            'absolute bg-gray-800 z-10 border-b-2 border-x-2  rounded-b-xl shadow-[inset_0px_0px_50px_0px] shadow-red';
+
+          key.style = `width: ${this.BLACK_KEY_WIDTH}rem; height: ${this.BLACK_KEY_HEIGHT}rem; left: ${
+            this.WHITE_KEY_WIDTH * (i + 1) - this.BLACK_KEY_WIDTH / 2
+          }rem`;
+
+          key.id = id
+        }
+        return key;
+      });
+
+      containerElement.append(...whiteKeyElements);
+      containerElement.append(...blackKeyElements);
+      this.updatePitches([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    }
+  }
+
   // Tell the browser to use our AstroHeart class for <astro-heart> elements.
   customElements.define('floating-text', FloatingText);
+  customElements.define('piano-heatmap', PianoHeatMap);
 </script>

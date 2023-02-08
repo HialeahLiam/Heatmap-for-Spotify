@@ -24,7 +24,6 @@ const fetcher = async (url: string) => {
 function useTrackSearch(initialSearchText = '') {
   const [search, setSearch] = useState(initialSearchText);
   const { data, isLoading, error } = useSWR(`${spotifyWebApiBaseUrl}/search?q=${search}&type=track`, fetcher);
-  console.log(search);
 
   return { setSearch, data, isLoading, error };
 }

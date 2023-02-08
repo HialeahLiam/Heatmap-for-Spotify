@@ -1,9 +1,9 @@
 import { TrackSearchItem } from '~/types';
 
 const trackObservers: Function[] = [];
-export let selectedTrackName: string | null;
-export function assignSelectedTrack(trackName: string) {
-  selectedTrackName = trackName;
+export let selectedTrackId: string | null;
+export function assignSelectedTrack(trackId: string) {
+  selectedTrackId = trackId;
 
   trackObservers.forEach((f) => {
     f();
