@@ -1,46 +1,110 @@
 ---
 import { SITE } from '~/config.mjs';
+import FloatingText from '~/components/common/FloatingText.astro';
 import Layout from '~/layouts/PageLayout.astro';
-
-import Hero from '~/components/widgets/Hero.astro';
-import Note from '~/components/widgets/Note.astro';
-import Features from '~/components/widgets/Features.astro';
-import Features2 from '~/components/widgets/Features2.astro';
-import Steps from '~/components/widgets/Steps.astro';
-import Content from '~/components/widgets/Content.astro';
-import LatestPosts from '~/components/blog/LatestPosts.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import TrackSearch from '~/components/TrackSearch';
+import SplitTitle from '~/components/SplitTitle';
+import { log } from 'astro/dist/core/logger/core';
+import { map } from 'astro/zod';
+import { floatingTextActionsObject } from '~/utils/handlers';
 
 const meta = {
   title: SITE.title,
   description: SITE.description,
   dontUseTitleTemplate: true,
 };
+
+function handleTrackSelection(track: string) {
+  console.log(track);
+}
 ---
 
+<script is:inline src="https://sdk.scdn.co/spotify-player.js"></script>
 <script>
   import { getSpotifyAuthToken } from '~/utils/auth';
 
-  const startPath = (await getSpotifyAuthToken()) ? '/heatmap' : '/login';
-  const startLink = document.getElementById('start-link') as HTMLAnchorElement;
-  startLink.href = startPath;
+  import { observeSelectedTrack, selectedTrackName } from '~/utils/track';
+
+  if (!(await getSpotifyAuthToken())) {
+    window.location.replace(`${import.meta.env.PUBLIC_DEV_URL}/login`);
+  }
+
+  function onTrackSelection() {
+    console.log('track name from astro! :', selectedTrackName);
+  }
+
+  observeSelectedTrack(onTrackSelection);
+
+  let accessToken = (await getSpotifyAuthToken())?.accessToken;
+
+  window.onSpotifyWebPlaybackSDKReady = () => {
+    const token = accessToken;
+    const player = new Spotify.Player({
+      name: 'Web Playback SDK Quick Start Player',
+      getOAuthToken: (cb) => {
+        cb(token);
+      },
+      volume: 0.5,
+    });
+
+    // Ready
+    player.addListener('ready', ({ device_id }) => {
+      console.log('Ready with Device ID', device_id);
+    });
+
+    // Not Ready
+    player.addListener('not_ready', ({ device_id }) => {
+      console.log('Device ID has gone offline', device_id);
+    });
+
+    player.addListener('initialization_error', ({ message }) => {
+      console.error(message);
+    });
+
+    player.addListener('authentication_error', ({ message }) => {
+      console.error(message);
+    });
+
+    player.addListener('account_error', ({ message }) => {
+      console.error(message);
+    });
+
+    document.getElementById('togglePlay').onclick = function () {
+      player.togglePlay();
+
+      document.getElementById('title').vanish();
+    };
+
+    document.getElementById('reappear-title').onclick = function () {
+      document.getElementById('title').reappear();
+    };
+
+    player.connect();
+  };
 </script>
 
 <Layout {meta}>
   <section>
     <div class="text-center w-1/2 mx-auto min-h-screen">
       <h1 class="text-7xl mb-4">This is an app</h1>
+      <!-- <FloatingText
+        text={`This is an app that \nwill change the 
+        entire world`}
+        actionsObject={floatingTextActionsObject}
+      /> -->
+      <floating-text id="title"
+        >{
+          `This is everthing the app does. 
+          It does many things. \nSo many things in fact it's actually insane.`
+        }</floating-text
+      >
+
       <p class="text-2xl px-10 mb-10">
         This is everthing the app does. It does many things. So many things in fact it's actually insane.
       </p>
-      <a
-        id="start-link"
-        href=""
-        class="text-lg border-solid border-2 py-2 px-5 rounded transition duration-300 hover:border-transparent hover:bg-gray-800"
-        >Start</a
-      >
+      <TrackSearch client:load />
+      <button id="togglePlay" onclick="handleButtonClick()">Play</button>
+      <button id="reappear-title">Reappear</button>
     </div>
   </section>
   <!-- Hero Widget ******************* -->

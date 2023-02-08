@@ -5,6 +5,7 @@ import ToggleTheme from '~/components/common/ToggleTheme.astro';
 import ToggleMenu from '~/components/common/ToggleMenu.astro';
 
 import { getHomePermalink, getAsset } from '~/utils/permalinks';
+import { getSpotifyAuthToken } from '~/utils/auth';
 
 interface Link {
   text?: string;
@@ -23,10 +24,9 @@ interface MenuLink extends Link {
 
 export interface Props {
   links?: Array<MenuLink>;
-  actions?: Array<ActionLink>;
+  // actions?: Array<ActionLink>;
   isSticky?: boolean;
   showToggleTheme?: boolean;
-  showRssFeed?: boolean;
   position?: string;
 }
 
@@ -38,7 +38,37 @@ const {
   showRssFeed = false,
   position = 'center',
 } = Astro.props;
+
+const accountAction: ActionLink = {};
+
+// if (await getSpotifyAuthToken()) {
+//   accountAction.text = 'Disconnect Spotify';
+// } else {
+//   accountAction.text = 'Connect Spotify';
+// }
 ---
+
+<script>
+  import { getSpotifyAuthToken, spotifyAuthUrl } from '~/utils/auth';
+
+  const accountButton = document.getElementById('account-button') as HTMLAnchorElement;
+  let accountActionText: string;
+  let accountActionHref: string;
+  if (await getSpotifyAuthToken()) {
+    accountActionText = 'Disconnect Spotify';
+    accountActionHref = '/disconnect-spotify';
+  } else {
+    accountActionText = 'Connect Spotify';
+    accountActionHref = spotifyAuthUrl;
+  }
+
+  accountButton.innerHTML = accountActionText;
+  accountButton.href = accountActionHref;
+
+  // while (true) {
+  //   console.log(true);
+  // }
+</script>
 
 <header
   class:list={[
@@ -111,7 +141,7 @@ const {
             </a>
           )
         }
-        {
+        <!-- {
           actions?.length ? (
             <span class="ml-4">
               {actions.map(({ text, href, type }) => (
@@ -129,7 +159,14 @@ const {
           ) : (
             ''
           )
-        }
+        } -->
+
+        <a
+          id="account-button"
+          class:list={['btn ml-2 py-2.5 px-5.5 md:px-6 font-semibold shadow-none text-sm']}
+          href="#"
+        >
+        </a>
       </div>
     </div>
   </div>

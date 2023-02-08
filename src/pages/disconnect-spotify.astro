@@ -1,0 +1,15 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+---
+
+<script>
+  import { eraseSpotifyTokenFromBrowser } from '~/utils/auth';
+
+  eraseSpotifyTokenFromBrowser();
+
+  window.location.replace(`${import.meta.env.PUBLIC_DEV_URL}/login`);
+</script>
+
+<PageLayout>
+  <p>Disconnecting Spotify</p>
+</PageLayout>

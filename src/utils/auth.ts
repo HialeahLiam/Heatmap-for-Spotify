@@ -2,6 +2,17 @@ import { SpotifyToken } from '~/types';
 
 const SPOTIFY_TOKEN_KEY = 'SPOTIFY_AUTH_TOKEN';
 
+const authorizeParams = {
+  client_id: import.meta.env.PUBLIC_SPOTIFY_CLIENT_ID,
+  response_type: 'code',
+  scope: import.meta.env.PUBLIC_SPOTIFY_SCOPES,
+  redirect_uri: `${import.meta.env.PUBLIC_DEV_URL}/spotifyAuthCallback`,
+};
+
+const searchParams = new URLSearchParams(authorizeParams);
+
+export const spotifyAuthUrl = `https://accounts.spotify.com/authorize?${searchParams.toString()}`;
+
 export const getSpotifyAuthToken = async (): Promise<SpotifyToken | null> => {
   const tokenString = window.localStorage.getItem(SPOTIFY_TOKEN_KEY);
 
@@ -96,6 +107,10 @@ export const requestSpotifyToken = async (authCode: string, redirectUri: string)
   const { access_token: accessToken, expires_in: expiresIn, refresh_token: refreshToken } = spotifyToken;
 
   return { accessToken, refreshToken, expirationDate: Date.now() + expiresIn * 1000 };
+};
+
+export const eraseSpotifyTokenFromBrowser = () => {
+  window.localStorage.removeItem(SPOTIFY_TOKEN_KEY);
 };
 
 export const storeSpotifyTokenInBrowser = (token: SpotifyToken) => {

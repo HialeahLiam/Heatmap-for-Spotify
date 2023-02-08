@@ -116,4 +116,120 @@ import { SITE } from '~/config.mjs';
     document.getElementById('header')?.classList.remove('h-screen');
     document.querySelector('#header nav')?.classList.add('hidden');
   };
+
+  // Define the behaviour for our new type of HTML element.
+  class AstroHeart extends HTMLElement {
+    constructor() {
+      super();
+      let count = 0;
+
+      const heartButton = this.querySelector('button');
+      const countSpan = this.querySelector('span');
+
+      // Each time the button is clicked, update the count.
+      heartButton.addEventListener('click', () => {
+        count++;
+        countSpan.textContent = count;
+      });
+    }
+  }
+
+  class FloatingText extends HTMLElement {
+    TAILWIND_TRANSLATE = '-translate-x-80';
+    TRANSLATION_DELAY = 50;
+
+    vanish() {
+      this.leftMovesFirst();
+
+      const spanTags = document.querySelectorAll('.floating-span');
+      for (let i = 0; i < spanTags.length; i++) {
+        const classList = spanTags[i].classList;
+
+        if (!classList.contains(this.TAILWIND_TRANSLATE)) classList.add(this.TAILWIND_TRANSLATE);
+        if (!classList.contains('opacity-0')) classList.add('opacity-0');
+      }
+    }
+
+    reappear() {
+      this.rightMovesFirst();
+
+      const spanTags = document.querySelectorAll('.floating-span');
+      for (let i = 0; i < spanTags.length; i++) {
+        spanTags[i].classList.remove(this.TAILWIND_TRANSLATE, 'opacity-0');
+      }
+    }
+
+    leftMovesFirst() {
+      const container = this.querySelector('div');
+      const lineElements = container.children;
+      for (let i = 0; i < lineElements.length; i++) {
+        const line = lineElements[i];
+        const characterElements = line.children;
+
+        for (let j = 0; j < characterElements.length; j++) {
+          const character = characterElements[j];
+
+          const delay = this.TRANSLATION_DELAY * j;
+          character.style = `transition-delay: ${delay}ms`;
+        }
+      }
+    }
+
+    rightMovesFirst() {
+      const container = this.querySelector('div');
+      const lineElements = container.children;
+      for (let i = 0; i < lineElements.length; i++) {
+        const line = lineElements[i];
+        const characterElements = line.children;
+
+        for (let j = 0; j < characterElements.length; j++) {
+          const character = characterElements[characterElements.length - 1 - j];
+
+          const delay = this.TRANSLATION_DELAY * j;
+          character.style = `transition-delay: ${delay}ms`;
+        }
+      }
+    }
+
+    constructor() {
+      super();
+      const container = document.createElement('div');
+
+      this.className += ' whitespace-pre-wrap';
+      const text = this.innerText;
+      console.log(text);
+      this.innerText = null;
+
+      this.appendChild(container);
+      container.className = 'text-7xl mb-4';
+
+      container.append(
+        ...text.split('\n').map((line) => {
+          const lineContainer = document.createElement('div');
+          lineContainer.append(
+            ...line
+              .trim()
+              .split('')
+              .map((s, i) => {
+                // const delay = 50 * i;
+
+                const span = document.createElement('span');
+                span.className = ` floating-span w-fit inline-block whitespace-pre transition ease-in duration-300`;
+                // span.style = `transition-delay: ${delay}ms`;
+                span.innerText = s;
+
+                return span;
+              })
+          );
+
+          return lineContainer;
+        })
+      );
+
+      this.leftMovesFirst();
+    }
+  }
+
+  // Tell the browser to use our AstroHeart class for <astro-heart> elements.
+  customElements.define('floating-text', FloatingText);
 </script>

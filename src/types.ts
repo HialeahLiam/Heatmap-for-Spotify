@@ -43,3 +43,26 @@ export interface SpotifyToken {
   refreshToken: string;
   expirationDate: number;
 }
+
+export interface SpotifyImage {
+  url: string;
+  height: number;
+  width: number;
+}
+
+export interface SpotifyArtist {
+  name: string;
+}
+
+export interface SpotifyAlbum {
+  images: SpotifyImage[];
+  name: string;
+  artists: SpotifyArtist[];
+}
+
+export interface TrackSearchItem {
+  album: SpotifyAlbum;
+  artists: SpotifyArtist[];
+  name: string;
+  id: string;
+}
