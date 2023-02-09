@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import useTrackSearch from '~/hooks/useTrackSearch';
-import { SpotifyAlbum, SpotifyArtist, TrackSearchItem } from '~/types';
+import { SpotifyAlbum, SpotifyArtist, SpotifyTrack } from '~/types';
 import { assignSelectedTrack } from '~/utils/track';
 
 const TrackSearch = () => {
   const [track, setTrack] = useState('');
   const { setSearch, isLoading, error, data } = useTrackSearch();
-  const [results, setResults] = useState<TrackSearchItem[]>([]);
+  const [results, setResults] = useState<SpotifyTrack[]>([]);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [resultsVisible, setResultsVisible] = useState(false);
 
@@ -16,7 +16,7 @@ const TrackSearch = () => {
 
   useEffect(() => {
     if (data) {
-      const tracks: TrackSearchItem[] = data.items;
+      const tracks: SpotifyTrack[] = data.items;
       setResults(tracks);
     }
   }, [data]);
@@ -38,12 +38,12 @@ const TrackSearch = () => {
     setIsInputFocused(false);
   }
 
-  function handleTrackSelection(track: TrackSearchItem) {
-    assignSelectedTrack(track.id);
+  function handleTrackSelection(track: SpotifyTrack) {
+    assignSelectedTrack(track);
     setTrack(track.name);
   }
 
-  const resultElements = results.map((item: TrackSearchItem) => {
+  const resultElements = results.map((item: SpotifyTrack) => {
     return (
       <div
         key={item.id}

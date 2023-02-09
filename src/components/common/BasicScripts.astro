@@ -136,7 +136,7 @@ import { SITE } from '~/config.mjs';
 
   class FloatingText extends HTMLElement {
     TAILWIND_TRANSLATE = '-translate-x-80';
-    TRANSLATION_DELAY = 50;
+    TRANSLATION_DELAY = 10;
 
     vanish() {
       this.leftMovesFirst();
@@ -173,7 +173,7 @@ import { SITE } from '~/config.mjs';
           positionInTextLine = 0;
         }
 
-        const delay = this.TRANSLATION_DELAY * positionInTextLine;
+        const delay = this.delay * positionInTextLine;
         character.style = `transition-delay: ${delay}ms`;
 
         positionInTextLine++;
@@ -195,23 +195,34 @@ import { SITE } from '~/config.mjs';
           positionInTextLine = 0;
         }
 
-        const delay = this.TRANSLATION_DELAY * positionInTextLine;
+        const delay = this.delay * positionInTextLine;
         character.style = `transition-delay: ${delay}ms`;
 
         positionInTextLine++;
       }
     }
 
+    get delay() {
+      const attribute = this.getAttribute('delay')
+      if (!attribute) return 50
+      return attribute
+    }
+    // set delay(amount) {
+    //   this.setAttribute('delay', amount)
+    // }
+
     constructor() {
       super();
       const container = document.createElement('div');
 
-      this.className += ' whitespace-pre-wrap';
+      // this.className += ' whitespace-pre-wrap';
       const text = this.innerText;
       this.innerText = null;
 
       this.appendChild(container);
-      container.className = 'text-7xl mb-4';
+      container.className = this.className;
+
+      console.log('delay: ', this.delay)
 
       container.append(
         ...text

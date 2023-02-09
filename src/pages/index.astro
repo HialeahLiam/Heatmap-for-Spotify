@@ -12,8 +12,9 @@ const meta = {
 
 <script is:inline src="https://sdk.scdn.co/spotify-player.js"></script>
 <script>
-  import { getSpotifyAuthToken } from '~/utils/auth';
-  import { observeSelectedTrack, selectedTrackId } from '~/utils/track';
+  import { FloatingTextElement } from '~/types';
+import { getSpotifyAuthToken } from '~/utils/auth';
+  import { observeSelectedTrack, selectedTrack } from '~/utils/track';
  
   const segments = [
     {
@@ -5874,9 +5875,17 @@ const meta = {
 
   let playbackObserverTimer: number | undefined;
   let currentSegmentIndex = 0;
+  let noTrackSelected = true
 
   function onTrackSelection() {
-    console.log('track name from astro! :', selectedTrackId);
+    console.log('track name from astro! :', selectedTrack);
+    if (noTrackSelected) {
+      // vanish initial text
+      const subtitleElement = document.getElementById('subtitle') as FloatingTextElement
+      subtitleElement.vanish()
+      console.log('vanish initial text')
+      noTrackSelected = !noTrackSelected
+    }
   }
 
   function doesPositionCorrespondToCurrentSegment(positionInMS: number): -1 | 0 | 1 {
@@ -5987,11 +5996,15 @@ const meta = {
 <Layout {meta}>
   <section>
     <div class="text-center w-1/2 mx-auto min-h-screen">
-      <h1 class="text-7xl mb-4">This is an app</h1>
+      <h1 id="title" class="text-7xl mb-4">This is an app</h1>
 
       <p class="text-2xl px-10 mb-10">
         This is everthing the app does. It does many things. So many things in fact it's actually insane.
       </p>
+      <floating-text delay="5" id="subtitle" class="text-2xl px-10 mb-10">
+        This is everthing the app does. 
+        It does many things. 
+        So many things in fact it's actually insane.</floating-text>
       <TrackSearch client:load />
       <button id="togglePlay">Play</button>
       <button hidden id="togglePause">Pause</button>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import useSWR from 'swr';
-import { TrackSearchItem } from '~/types';
+import { SpotifyTrack } from '~/types';
 import { getSpotifyAuthToken } from '~/utils/auth';
 
 const spotifyWebApiBaseUrl = 'https://api.spotify.com/v1';

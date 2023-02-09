@@ -60,9 +60,15 @@ export interface SpotifyAlbum {
   artists: SpotifyArtist[];
 }
 
-export interface TrackSearchItem {
+export interface SpotifyTrack {
   album: SpotifyAlbum;
   artists: SpotifyArtist[];
   name: string;
+  href: string;
   id: string;
+  uri: string;
+}
+
+export interface FloatingTextElement extends HTMLElement {
+  vanish: Function;
 }

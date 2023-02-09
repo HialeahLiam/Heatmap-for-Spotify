@@ -1,10 +1,9 @@
-import { TrackSearchItem } from '~/types';
+import { SpotifyTrack } from '~/types';
 
 const trackObservers: Function[] = [];
-export let selectedTrackId: string | null;
-export function assignSelectedTrack(trackId: string) {
-  selectedTrackId = trackId;
-
+export let selectedTrack: SpotifyTrack | null;
+export function assignSelectedTrack(track: SpotifyTrack) {
+  selectedTrack = track;
   trackObservers.forEach((f) => {
     f();
   });
