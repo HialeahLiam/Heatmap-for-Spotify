@@ -3,7 +3,7 @@ import useTrackSearch from '~/hooks/useTrackSearch';
 import { SpotifyAlbum, SpotifyArtist, SpotifyTrack } from '~/types';
 import { assignSelectedTrack } from '~/utils/track';
 
-const TrackSearch = () => {
+const TrackSearch = ({ onTrackSelect }) => {
   const [track, setTrack] = useState('');
   const { setSearch, isLoading, error, data } = useTrackSearch();
   const [results, setResults] = useState<SpotifyTrack[]>([]);
@@ -39,7 +39,7 @@ const TrackSearch = () => {
   }
 
   function handleTrackSelection(track: SpotifyTrack) {
-    assignSelectedTrack(track);
+    onTrackSelect(track);
     setTrack(track.name);
   }
 
