@@ -14,7 +14,6 @@
     "subfont": "subfont -ir --no-fallbacks --silent --root dist"
   },
   "devDependencies": {
-    "@astrojs/image": "0.13.0",
     "@astrojs/mdx": "^0.15.0",
     "@astrojs/partytown": "^1.0.3",
     "@astrojs/rss": "^2.1.0",
@@ -47,7 +46,7 @@
     "node": ">=16.12.0"
   },
   "dependencies": {
-    "@astrojs/netlify": "^2.1.2",
+    "@astrojs/image": "^0.14.1",
     "@astrojs/react": "^2.0.2",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
