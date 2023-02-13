@@ -20,7 +20,9 @@ const meta = {
 
   let segments = null;
   if (!(await getSpotifyAuthToken())) {
-    window.location.replace(`${import.meta.env.PUBLIC_DEV_URL}/login`);
+    // dev
+    // window.location.replace(`${import.meta.env.PUBLIC_DEV_URL}/login`);
+    window.location.replace(`/login`);
   }
 
   observeSelectedTrack(onTrackSelection);

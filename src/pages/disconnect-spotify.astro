@@ -7,7 +7,9 @@ import PageLayout from '~/layouts/PageLayout.astro';
 
   eraseSpotifyTokenFromBrowser();
 
-  window.location.replace(`${import.meta.env.PUBLIC_DEV_URL}/login`);
+  //dev
+  // window.location.replace(`${import.meta.env.PUBLIC_DEV_URL}/login`);
+  window.location.replace(`/login`);
 </script>
 
 <PageLayout>
