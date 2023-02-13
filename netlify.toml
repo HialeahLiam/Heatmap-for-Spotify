@@ -1,6 +1,8 @@
 [build]
   publish = "dist"
   command = "npm run build"
+[functions]
+  external_node_modules = ["svgo", "astro"]
 [[headers]]
   for = "/assets/*"
   [headers.values]
