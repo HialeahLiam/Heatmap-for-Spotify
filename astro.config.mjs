@@ -10,9 +10,12 @@ import compress from 'astro-compress';
 import { readingTimeRemarkPlugin } from './src/utils/frontmatter.mjs';
 import { SITE } from './src/config.mjs';
 import react from '@astrojs/react';
+import netlify from '@astrojs/netlify/functions';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const whenExternalScripts = (items = []) =>
   SITE.googleAnalyticsId ? (Array.isArray(items) ? items.map((item) => item()) : [items()]) : [];
+
+// https://astro.build/config
 
 // https://astro.build/config
 
@@ -23,7 +26,7 @@ export default defineConfig({
   site: SITE.origin,
   base: SITE.basePathname,
   trailingSlash: SITE.trailingSlash ? 'always' : 'never',
-  output: 'static',
+  output: 'server',
   markdown: {
     remarkPlugins: [readingTimeRemarkPlugin],
   },
@@ -64,4 +67,5 @@ export default defineConfig({
       },
     },
   },
+  adapter: netlify(),
 });
