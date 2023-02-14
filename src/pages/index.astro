@@ -34,12 +34,13 @@ const meta = {
   let playbackObserverTimer: number | undefined;
   let currentSegmentIndex = 0;
   let noTrackSelected = true;
-  let playNewTrack = true;
+  // let playNewTrack = true;
 
   async function onTrackSelection() {
     console.log('track name from astro! :', selectedTrack);
     segments = await getTrackSegments(selectedTrack.id);
-    playNewTrack = true;
+    await playTrack(selectedTrack.album.uri, selectedTrack.uri, spotifyDeviceId);
+    // playNewTrack = true;
   }
 
   function doesPositionCorrespondToCurrentSegment(positionInMS: number): -1 | 0 | 1 {
@@ -136,10 +137,10 @@ const meta = {
         return;
       }
 
-      if (playNewTrack) {
-        await playTrack(selectedTrack.album.uri, selectedTrack.uri, spotifyDeviceId);
-        playNewTrack = false;
-      }
+      // if (playNewTrack) {
+      //   await playTrack(selectedTrack.album.uri, selectedTrack.uri, spotifyDeviceId);
+      //   playNewTrack = false;
+      // }
       player.resume().then(() => {
         console.log('Toggled playback!');
       });
