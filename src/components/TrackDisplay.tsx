@@ -11,23 +11,30 @@ function TrackDisplay() {
     assignSelectedTrack(track);
   }
   return (
-    <>
-      {track ? (
-        <Track name={track.name} image={track.album.images[0].url}></Track>
-      ) : (
-        <>
-          <h2 id="title" className="text-7xl mb-4">
-            This is an app
-          </h2>
+    <div>
+      <div className="mb-5">
+        {track ? (
+          <Track
+            name={track.name}
+            image={track.album.images[0].url}
+            artists={track.artists}
+            album={track.album.name}
+          ></Track>
+        ) : (
+          <>
+            <h2 id="title" className="md:text-7xl text-4xl mb-4 ">
+              Search a track
+            </h2>
 
-          <p id="subtitle" className="text-2xl px-10 mb-10">
-            This is everthing the app does. It does many things. So many things in fact it's actually insane.
-          </p>
-        </>
-      )}
+            <p id="subtitle" className="md:text-2xl text-xl px-10 mb">
+              Visualize Spotify's analysis of the track's pitches.
+            </p>
+          </>
+        )}
+      </div>
 
       <TrackSearch onTrackSelect={handleTrackSelection} />
-    </>
+    </div>
   );
 }
 

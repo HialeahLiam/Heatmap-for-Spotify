@@ -69,9 +69,9 @@ const TrackSearch = ({ onTrackSelect }) => {
   });
 
   return (
-    <div className="flex flex-col relative items-center">
+    <div className="flex flex-col relative items-center justify-center">
       <input
-        className=" text-black py-1 px-2 rounded focus:outline-none  focus:shadow-[inset_0px_0px_5px_2px] focus:shadow-green-400 mb-4"
+        className=" bg-gray-800 text-white dark:text-black dark:bg-white py-1 px-2 rounded focus:outline-none  focus:shadow-[inset_0px_0px_5px_2px] dark:focus:shadow-green-400 focus:shadow-gray-200 mb-4"
         type="text"
         value={track}
         placeholder="Search a track"
@@ -81,8 +81,8 @@ const TrackSearch = ({ onTrackSelect }) => {
       />
       <div
         className={` ${
-          resultsVisible ? 'max-h-80' : 'max-h-0'
-        } absolute z-20 top-10 overflow-scroll rounded w-3/4 divide-y transition-[max-height] duration-300`}
+          resultsVisible ? ' max-h-80' : 'max-h-0'
+        } absolute z-20 top-10 overflow-scroll rounded w-5/6 divide-y transition-[max-height] duration-300`}
       >
         {resultElements}
       </div>

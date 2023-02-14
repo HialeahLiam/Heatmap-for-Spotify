@@ -203,9 +203,9 @@ import { SITE } from '~/config.mjs';
     }
 
     get delay() {
-      const attribute = this.getAttribute('delay')
-      if (!attribute) return 50
-      return attribute
+      const attribute = this.getAttribute('delay');
+      if (!attribute) return 50;
+      return attribute;
     }
     // set delay(amount) {
     //   this.setAttribute('delay', amount)
@@ -222,7 +222,7 @@ import { SITE } from '~/config.mjs';
       this.appendChild(container);
       container.className = this.className;
 
-      console.log('delay: ', this.delay)
+      console.log('delay: ', this.delay);
 
       container.append(
         ...text
@@ -247,9 +247,11 @@ import { SITE } from '~/config.mjs';
     BLACK_KEY_WIDTH = '3';
     WHITE_KEY_HEIGHT = '18';
     BLACK_KEY_HEIGHT = '13';
+    SM_WHITE_KEY_WIDTH = '10';
+    SM_BLACK_KEY_WIDTH = '8';
 
     classMap = {
-      0: ['shadow-red'],
+      0: ['shadow-white'],
       100: ['shadow-red-100'],
       200: ['shadow-red-200'],
       300: ['shadow-red-300'],
@@ -259,70 +261,69 @@ import { SITE } from '~/config.mjs';
       700: ['shadow-red-700'],
       800: ['shadow-red-800'],
       900: ['shadow-red-900'],
-    }
+    };
 
     pitchMap = [
       {
-        id: "C",
-        class: this.classMap[0]
+        id: 'C',
+        class: this.classMap[0],
       },
       {
-        id: "C#",
-        class: this.classMap[0]
+        id: 'C#',
+        class: this.classMap[0],
       },
       {
-        id: "D",
-        class: this.classMap[0]
+        id: 'D',
+        class: this.classMap[0],
       },
       {
-        id: "D#",
-        class: this.classMap[0]
+        id: 'D#',
+        class: this.classMap[0],
       },
       {
-        id: "E",
-        class: this.classMap[0]
+        id: 'E',
+        class: this.classMap[0],
       },
       {
-        id: "F",
-        class: this.classMap[0]
+        id: 'F',
+        class: this.classMap[0],
       },
       {
-        id: "F#",
-        class: this.classMap[0]
+        id: 'F#',
+        class: this.classMap[0],
       },
       {
-        id: "G",
-        class: this.classMap[0]
+        id: 'G',
+        class: this.classMap[0],
       },
       {
-        id: "G#",
-        class: this.classMap[0]
+        id: 'G#',
+        class: this.classMap[0],
       },
       {
-        id: "A",
-        class: this.classMap[0]
+        id: 'A',
+        class: this.classMap[0],
       },
       {
-        id: "A#",
-        class: this.classMap[0]
+        id: 'A#',
+        class: this.classMap[0],
       },
       {
-        id: "B",
-        class: this.classMap[0]
+        id: 'B',
+        class: this.classMap[0],
       },
-    ]
+    ];
 
     updatePitches(pitches) {
-
       pitches.forEach((p, i) => {
-        let rounded = Math.floor((p * 10)) * 100
-        if (rounded === 1000) rounded = 900
+        let rounded = Math.floor(p * 10) * 100;
+        if (rounded === 1000) rounded = 900;
 
-        const key = document.getElementById(this.pitchMap[i].id)
-        key.classList.remove(this.pitchMap[i].class)
-        this.pitchMap[i].class = this.classMap[rounded]
-        key.classList.add(this.pitchMap[i].class)
-      })
+        const key = document.getElementById(this.pitchMap[i].id);
+        key.classList.remove(this.pitchMap[i].class);
+        this.pitchMap[i].class = this.classMap[rounded];
+        key.classList.add(this.pitchMap[i].class);
+      });
     }
 
     constructor() {
@@ -337,9 +338,9 @@ import { SITE } from '~/config.mjs';
 
       const whiteKeyElements = whiteKeyIds.map((id) => {
         const containerKey = document.createElement('div');
-        containerKey.className = `relative bg-gray-700 border-x border-b border-white rounded-b-xl shadow-[inset_0px_0px_50px_10px]`;
-        containerKey.style = `width: ${this.WHITE_KEY_WIDTH}rem; height: ${this.WHITE_KEY_HEIGHT}rem`;
-        containerKey.id = id
+        containerKey.className = `relative bg-gray-700 border-x md:w-16 h-72 w-10  border-b border-white rounded-b-xl shadow-[inset_0px_0px_50px_10px]`;
+        // containerKey.style = `width: ${this.WHITE_KEY_WIDTH}rem; height: ${this.WHITE_KEY_HEIGHT}rem`;
+        containerKey.id = id;
 
         // const key = document.createElement('div');
         // key.className = 'absolute bg-red-200 inset-0 rounded-b-xl';
@@ -347,24 +348,30 @@ import { SITE } from '~/config.mjs';
         return containerKey;
       });
 
+      const blackKeysContainer = document.createElement('div');
+      // !!! value of left should be half the width of white keys
+      blackKeysContainer.className = 'absolute flex md:left-8 left-5';
+
       const blackKeyElements = blackKeyIds.map((id, i) => {
         const key = document.createElement('div');
-        if (id) {
-          key.className =
-            'absolute bg-gray-800 z-10 border-b-2 border-x-2  rounded-b-xl shadow-[inset_0px_0px_50px_0px] shadow-red';
+        // if (id) {
+        key.className =
+          'md:w-16 h-56 w-10 z-10 bg-gray-800 z-10 border-b-2 border-x-2  rounded-b-xl shadow-[inset_0px_0px_50px_0px]';
 
-          key.style = `width: ${this.BLACK_KEY_WIDTH}rem; height: ${this.BLACK_KEY_HEIGHT}rem; left: ${
-            this.WHITE_KEY_WIDTH * (i + 1) - this.BLACK_KEY_WIDTH / 2
-          }rem`;
+        // key.style = `width: ${this.BLACK_KEY_WIDTH}rem; height: ${this.BLACK_KEY_HEIGHT}rem; left: ${
+        //   this.WHITE_KEY_WIDTH * (i + 1) - this.BLACK_KEY_WIDTH / 2
+        // }rem`;
 
-          key.id = id
-        }
+        key.id = id;
+        // }
+        if (!id) key.classList.add('opacity-0');
         return key;
       });
+      blackKeysContainer.append(...blackKeyElements);
 
       containerElement.append(...whiteKeyElements);
-      containerElement.append(...blackKeyElements);
-      this.updatePitches([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+      containerElement.appendChild(blackKeysContainer);
+      this.updatePitches([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     }
   }
 
