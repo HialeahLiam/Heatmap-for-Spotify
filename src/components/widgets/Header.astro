@@ -44,7 +44,7 @@ const accountAction: ActionLink = {};
 <script>
   import { getSpotifyAuthToken, spotifyAuthUrl } from '~/utils/auth';
 
-  const accountButton = document.getElementById('account-button') as HTMLAnchorElement;
+  const accountButtons = document.getElementsByClassName('account-button') as HTMLCollectionOf<HTMLAnchorElement>;
   let accountActionText: string;
   let accountActionHref: string;
   if (await getSpotifyAuthToken()) {
@@ -55,8 +55,10 @@ const accountAction: ActionLink = {};
     accountActionHref = spotifyAuthUrl;
   }
 
-  accountButton.innerHTML = accountActionText;
-  accountButton.href = accountActionHref;
+  for (let i = 0; i < accountButtons.length; i++) {
+    accountButtons[i].innerHTML = accountActionText;
+    accountButtons[i].href = accountActionHref;
+  }
 </script>
 
 <header
@@ -113,6 +115,11 @@ const accountAction: ActionLink = {};
             </li>
           ))
         }
+        <li>
+          <a
+            class:list={['account-button btn ml-2 py-2.5 px-5.5 md:hidden md:px-6 font-semibold shadow-none text-sm']}
+            href="#"></a>
+        </li>
       </ul>
     </nav>
     <div class:list={[{ 'ml-auto': position === 'left' }, 'md:self-center flex items-center md:mb-0']}>
@@ -130,31 +137,8 @@ const accountAction: ActionLink = {};
             </a>
           )
         }
-        <!-- {
-          actions?.length ? (
-            <span class="ml-4">
-              {actions.map(({ text, href, type }) => (
-                <a
-                  class:list={[
-                    'btn ml-2 py-2.5 px-5.5 md:px-6 font-semibold shadow-none text-sm',
-                    { 'btn-ghost': type === 'ghost', 'btn-primary': type === 'primary' },
-                  ]}
-                  href={href}
-                >
-                  <Fragment set:html={text} />
-                </a>
-              ))}
-            </span>
-          ) : (
-            ''
-          )
-        } -->
 
-        <a
-          id="account-button"
-          class:list={['btn ml-2 py-2.5 px-5.5 md:px-6 font-semibold shadow-none text-sm']}
-          href="#"
-        >
+        <a class:list={['account-button btn ml-2 py-2.5 px-5.5 md:px-6 font-semibold shadow-none text-sm']} href="#">
         </a>
       </div>
     </div>
