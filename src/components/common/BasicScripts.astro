@@ -83,27 +83,27 @@ import { SITE } from '~/config.mjs';
       newlink.click();
     });
 
-    function appyHeaderStylesOnScroll() {
-      const header = document.getElementById('header');
-      if (lastKnownScrollPosition > 60 && !header.classList.contains('scroll')) {
-        document.getElementById('header').classList.add('scroll');
-      } else if (lastKnownScrollPosition <= 60 && header.classList.contains('scroll')) {
-        document.getElementById('header').classList.remove('scroll');
-      }
-      ticking = false;
-    }
-    appyHeaderStylesOnScroll();
+    // function appyHeaderStylesOnScroll() {
+    //   const header = document.getElementById('header');
+    //   if (lastKnownScrollPosition > 60 && !header.classList.contains('scroll')) {
+    //     document.getElementById('header').classList.add('scroll');
+    //   } else if (lastKnownScrollPosition <= 60 && header.classList.contains('scroll')) {
+    //     document.getElementById('header').classList.remove('scroll');
+    //   }
+    //   ticking = false;
+    // }
+    // appyHeaderStylesOnScroll();
 
-    attachEvent([document], 'scroll', function () {
-      lastKnownScrollPosition = window.scrollY;
+    // attachEvent([document], 'scroll', function () {
+    //   lastKnownScrollPosition = window.scrollY;
 
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          appyHeaderStylesOnScroll();
-        });
-        ticking = true;
-      }
-    });
+    //   if (!ticking) {
+    //     window.requestAnimationFrame(() => {
+    //       appyHeaderStylesOnScroll();
+    //     });
+    //     ticking = true;
+    //   }
+    // });
   };
 
   window.onpageshow = function () {
