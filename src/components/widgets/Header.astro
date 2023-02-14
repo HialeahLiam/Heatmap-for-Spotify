@@ -5,7 +5,6 @@ import ToggleTheme from '~/components/common/ToggleTheme.astro';
 import ToggleMenu from '~/components/common/ToggleMenu.astro';
 
 import { getHomePermalink, getAsset } from '~/utils/permalinks';
-import { getSpotifyAuthToken } from '~/utils/auth';
 
 interface Link {
   text?: string;
@@ -40,12 +39,6 @@ const {
 } = Astro.props;
 
 const accountAction: ActionLink = {};
-
-// if (await getSpotifyAuthToken()) {
-//   accountAction.text = 'Disconnect Spotify';
-// } else {
-//   accountAction.text = 'Connect Spotify';
-// }
 ---
 
 <script>
@@ -64,10 +57,6 @@ const accountAction: ActionLink = {};
 
   accountButton.innerHTML = accountActionText;
   accountButton.href = accountActionHref;
-
-  // while (true) {
-  //   console.log(true);
-  // }
 </script>
 
 <header
