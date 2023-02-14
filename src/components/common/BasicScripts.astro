@@ -338,7 +338,7 @@ import { SITE } from '~/config.mjs';
 
       const whiteKeyElements = whiteKeyIds.map((id) => {
         const containerKey = document.createElement('div');
-        containerKey.className = `relative bg-gray-700 border-x md:w-16 h-72 w-10  border-b border-white rounded-b-xl shadow-[inset_0px_0px_50px_10px]`;
+        containerKey.className = `relative bg-gray-700 border-x md:w-16 md:h-72 h-56 w-10  border-b border-white rounded-b-xl shadow-[inset_0px_0px_50px_10px]`;
         // containerKey.style = `width: ${this.WHITE_KEY_WIDTH}rem; height: ${this.WHITE_KEY_HEIGHT}rem`;
         containerKey.id = id;
 
@@ -356,7 +356,7 @@ import { SITE } from '~/config.mjs';
         const key = document.createElement('div');
         // if (id) {
         key.className =
-          'md:w-16 h-56 w-10 z-10 bg-gray-800 z-10 border-b-2 border-x-2  rounded-b-xl shadow-[inset_0px_0px_50px_0px]';
+          'md:w-16 md:h-56 h-40 w-10 z-10 bg-gray-800 z-10 border-b-2 border-x-2  rounded-b-xl shadow-[inset_0px_0px_50px_0px]';
 
         // key.style = `width: ${this.BLACK_KEY_WIDTH}rem; height: ${this.BLACK_KEY_HEIGHT}rem; left: ${
         //   this.WHITE_KEY_WIDTH * (i + 1) - this.BLACK_KEY_WIDTH / 2
