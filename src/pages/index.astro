@@ -12,13 +12,11 @@ const meta = {
 };
 ---
 
-<script is:inline src="https://sdk.scdn.co/spotify-player.js"></script>
+<script defer is:inline src="https://sdk.scdn.co/spotify-player.js"></script>
 <script>
   import { currentTrack, selectedTrack } from '~/trackStore';
-  import { FloatingTextElement } from '~/types';
   import { getSpotifyAuthToken } from '~/utils/auth';
   import { getTrackSegments, playTrack } from '~/utils/spotifyWebApi';
-  // import { observeSelectedTrack, selectedTrack } from '~/utils/track';
 
   let segments = null;
   let currentTrackId = null;
@@ -80,7 +78,7 @@ const meta = {
 
   let player = null;
 
-  window.onSpotifyWebPlaybackSDKReady = () => {
+  const playbackReadyCallback = () => {
     const token = accessToken;
     player = new Spotify.Player({
       name: 'Web Playback SDK Quick Start Player',
@@ -212,6 +210,7 @@ const meta = {
     player.connect();
   };
 
+  window.onSpotifyWebPlaybackSDKReady = playbackReadyCallback;
   function titleGone() {
     console.log('title gone!');
   }
