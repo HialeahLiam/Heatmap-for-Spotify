@@ -20,12 +20,16 @@ const meta = {
   import { observeSelectedTrack, selectedTrack } from '~/utils/track';
 
   let segments = null;
+  let currentTrackId = null;
   if (!(await getSpotifyAuthToken())) {
     // dev
     // window.location.replace(`${import.meta.env.PUBLIC_DEV_URL}/login`);
     window.location.replace(`/login`);
   }
 
+  async function refreshPitchSegments(trackId) {
+    segments = await getTrackSegments(trackId);
+  }
   observeSelectedTrack(onTrackSelection);
 
   let accessToken = (await getSpotifyAuthToken())?.accessToken;
@@ -38,8 +42,11 @@ const meta = {
 
   async function onTrackSelection() {
     console.log('track name from astro! :', selectedTrack);
-    segments = await getTrackSegments(selectedTrack.id);
+    await refreshPitchSegments(selectedTrack.id);
+    currentTrackId = selectedTrack.id;
     await playTrack(selectedTrack.album.uri, selectedTrack.uri, spotifyDeviceId);
+    player.activateElement();
+    console.log('spotify player activated');
     // playNewTrack = true;
   }
 
@@ -65,9 +72,11 @@ const meta = {
     return segments[currentSegmentIndex];
   }
 
+  let player = null;
+
   window.onSpotifyWebPlaybackSDKReady = () => {
     const token = accessToken;
-    const player = new Spotify.Player({
+    player = new Spotify.Player({
       name: 'Web Playback SDK Quick Start Player',
       getOAuthToken: (cb) => {
         cb(token);
@@ -98,33 +107,41 @@ const meta = {
       console.error(message);
     });
 
-    player.addListener('player_state_changed', ({ position, duration, paused, track_window: { current_track } }) => {
-      clearInterval(playbackObserverTimer);
-      if (!paused) {
-        playbackObserverTimer = window.setInterval(async () => {
-          const playerState = await player.getCurrentState();
+    player.addListener(
+      'player_state_changed',
+      async ({ position, duration, paused, track_window: { current_track } }) => {
+        console.log({ current_track });
 
-          if (!playerState) {
-            console.error('User is not playing music through the Web Playback SDK');
-            clearInterval(playbackObserverTimer);
-            return;
-          }
+        if (currentTrackId !== current_track.id) await refreshPitchSegments(selectedTrack.id);
 
-          const { position } = playerState;
-          const segment = getCurrentTrackSegment(position);
-          const heatmap = document.getElementsByTagName('piano-heatmap')[0];
-          if (heatmap && segment.confidence > 0.5) {
-            heatmap.updatePitches(segment.pitches);
-          }
-        }, 200);
+        clearInterval(playbackObserverTimer);
+        if (!paused) {
+          playbackObserverTimer = window.setInterval(async () => {
+            const playerState = await player.getCurrentState();
 
-        playButton.hidden = true;
-        pauseButton.hidden = false;
-      } else {
-        playButton.hidden = false;
-        pauseButton.hidden = true;
+            if (!playerState) {
+              console.error('User is not playing music through the Web Playback SDK');
+              clearInterval(playbackObserverTimer);
+              return;
+            }
+
+            const { position } = playerState;
+            const segment = getCurrentTrackSegment(position);
+            const heatmap = document.getElementsByTagName('piano-heatmap')[0];
+            if (heatmap && segment.confidence > 0.0) {
+              console.log('update');
+              heatmap.updatePitches(segment.pitches);
+            }
+          }, 200);
+
+          playButton.hidden = true;
+          pauseButton.hidden = false;
+        } else {
+          playButton.hidden = false;
+          pauseButton.hidden = true;
+        }
       }
-    });
+    );
 
     const playButton = document.getElementById('togglePlay') as HTMLButtonElement;
     const pauseButton = document.getElementById('togglePause') as HTMLButtonElement;

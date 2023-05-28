@@ -52,12 +52,12 @@ const TrackSearch = ({ onTrackSelect }) => {
       >
         <img
           className=" h-24 w-24"
-          src={item.album.images[0].url}
-          alt={`Album cover for ${item.album.name} by ${item.artists[0].name}`}
+          src={item.album.images[0]?.url}
+          alt={`Album cover for ${item.album?.name} by ${item.artists[0]?.name}`}
         />
         <div className=" text-left text-black">
-          <h3 className=" text-2xl">{item.name}</h3>
-          <span className=" text-xs text-gray-500">{item.album.name}</span>
+          <h3 className=" text-2xl">{item?.name}</h3>
+          <span className=" text-xs text-gray-500">{item.album?.name}</span>
           <div>
             {item.artists.map((a) => (
               <span>{a.name}</span>
