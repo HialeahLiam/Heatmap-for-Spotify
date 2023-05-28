@@ -12,9 +12,9 @@ const meta = {
 };
 ---
 
-<script defer is:inline src="https://sdk.scdn.co/spotify-player.js"></script>
 <script>
   import { currentTrack, selectedTrack } from '~/trackStore';
+
   import { getSpotifyAuthToken } from '~/utils/auth';
   import { getTrackSegments, playTrack } from '~/utils/spotifyWebApi';
 
@@ -215,6 +215,7 @@ const meta = {
     console.log('title gone!');
   }
 </script>
+<script is:inline src="https://sdk.scdn.co/spotify-player.js"></script>
 
 <Layout {meta}>
   <section>
