@@ -51,7 +51,9 @@ const meta = {
   });
 
   currentTrack.listen(async (track) => {
-    await refreshPitchSegments(track.id);
+    if (track) {
+      await refreshPitchSegments(track.id);
+    }
   });
 
   function doesPositionCorrespondToCurrentSegment(positionInMS: number): -1 | 0 | 1 {
