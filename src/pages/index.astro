@@ -18,6 +18,12 @@ const meta = {
   import { getSpotifyAuthToken } from '~/utils/auth';
   import { getTrackSegments, playTrack } from '~/utils/spotifyWebApi';
 
+  const script = document.createElement('script');
+  script.src = 'https://sdk.scdn.co/spotify-player.js';
+  script.async = true;
+
+  document.body.appendChild(script);
+
   let segments = null;
   let currentTrackId = null;
   if (!(await getSpotifyAuthToken())) {
@@ -215,8 +221,7 @@ const meta = {
     console.log('title gone!');
   }
 </script>
-<script is:inline src="https://sdk.scdn.co/spotify-player.js"></script>
-
+<!-- <script  is:inline src="https://sdk.scdn.co/spotify-player.js"></script> -->
 <Layout {meta}>
   <section>
     <div class="text-center md:w-1/2 w-7/8 mx-auto">
