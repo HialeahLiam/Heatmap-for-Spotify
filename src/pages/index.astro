@@ -38,13 +38,13 @@ const meta = {
   let playbackObserverTimer: number | undefined;
   let currentSegmentIndex = 0;
 
-  selectedTrack.subscribe(async (track) => {
+  selectedTrack.listen(async (track) => {
     console.log('track from index subscribe: ', { track });
     console.log(track.id);
     if (track) {
       await refreshPitchSegments(track.id);
       await playTrack(track.album.uri, track.uri, spotifyDeviceId);
-      player.activateElement();
+      player?.activateElement();
       console.log('spotify player activated');
       currentTrack.set(selectedTrack.get());
     }
