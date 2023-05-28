@@ -49,9 +49,11 @@
     "@astrojs/image": "^0.14.1",
     "@astrojs/react": "^2.0.2",
     "@astrojs/vercel": "^3.1.1",
+    "@nanostores/react": "^0.7.1",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "html-to-image": "^1.11.11",
+    "nanostores": "^0.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "swr": "^2.0.3"

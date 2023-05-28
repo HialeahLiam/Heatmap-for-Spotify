@@ -14,10 +14,11 @@ const meta = {
 
 <script is:inline src="https://sdk.scdn.co/spotify-player.js"></script>
 <script>
+  import { currentTrack, selectedTrack } from '~/trackStore';
   import { FloatingTextElement } from '~/types';
   import { getSpotifyAuthToken } from '~/utils/auth';
   import { getTrackSegments, playTrack } from '~/utils/spotifyWebApi';
-  import { observeSelectedTrack, selectedTrack } from '~/utils/track';
+  // import { observeSelectedTrack, selectedTrack } from '~/utils/track';
 
   let segments = null;
   let currentTrackId = null;
@@ -30,25 +31,28 @@ const meta = {
   async function refreshPitchSegments(trackId) {
     segments = await getTrackSegments(trackId);
   }
-  observeSelectedTrack(onTrackSelection);
 
   let accessToken = (await getSpotifyAuthToken())?.accessToken;
   let spotifyDeviceId = null;
 
   let playbackObserverTimer: number | undefined;
   let currentSegmentIndex = 0;
-  let noTrackSelected = true;
-  // let playNewTrack = true;
 
-  async function onTrackSelection() {
-    console.log('track name from astro! :', selectedTrack);
-    await refreshPitchSegments(selectedTrack.id);
-    currentTrackId = selectedTrack.id;
-    await playTrack(selectedTrack.album.uri, selectedTrack.uri, spotifyDeviceId);
-    player.activateElement();
-    console.log('spotify player activated');
-    // playNewTrack = true;
-  }
+  selectedTrack.subscribe(async (track) => {
+    console.log('track from index subscribe: ', { track });
+    console.log(track.id);
+    if (track) {
+      await refreshPitchSegments(track.id);
+      await playTrack(track.album.uri, track.uri, spotifyDeviceId);
+      player.activateElement();
+      console.log('spotify player activated');
+      currentTrack.set(selectedTrack.get());
+    }
+  });
+
+  currentTrack.listen(async (track) => {
+    await refreshPitchSegments(track.id);
+  });
 
   function doesPositionCorrespondToCurrentSegment(positionInMS: number): -1 | 0 | 1 {
     const segment = segments[currentSegmentIndex];
@@ -112,7 +116,9 @@ const meta = {
       async ({ position, duration, paused, track_window: { current_track } }) => {
         console.log({ current_track });
 
-        if (currentTrackId !== current_track.id) await refreshPitchSegments(selectedTrack.id);
+        if (currentTrack.get().id !== current_track.id) {
+          currentTrack.set(current_track);
+        }
 
         clearInterval(playbackObserverTimer);
         if (!paused) {

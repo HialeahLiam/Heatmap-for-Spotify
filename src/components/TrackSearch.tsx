@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import useTrackSearch from '~/hooks/useTrackSearch';
+import { selectedTrack } from '~/trackStore';
 import { SpotifyAlbum, SpotifyArtist, SpotifyTrack } from '~/types';
-import { assignSelectedTrack } from '~/utils/track';
 
-const TrackSearch = ({ onTrackSelect }) => {
+const TrackSearch = () => {
   const [track, setTrack] = useState('');
   const { setSearch, isLoading, error, data } = useTrackSearch();
   const [results, setResults] = useState<SpotifyTrack[]>([]);
@@ -39,7 +39,8 @@ const TrackSearch = ({ onTrackSelect }) => {
   }
 
   function handleTrackSelection(track: SpotifyTrack) {
-    onTrackSelect(track);
+    selectedTrack.set(track);
+    console.log('selected tack set!');
     setTrack(track.name);
   }
 

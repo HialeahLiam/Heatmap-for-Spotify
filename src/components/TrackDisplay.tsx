@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { SpotifyTrack } from '~/types';
-import { assignSelectedTrack } from '~/utils/track';
 import TrackSearch from './TrackSearch';
 import Track from './widgets/Track';
+import { useStore } from '@nanostores/react';
+import { currentTrack, selectedTrack } from '~/trackStore';
 
 function TrackDisplay() {
-  const [track, setTrack] = useState<SpotifyTrack>();
-  function handleTrackSelection(track: SpotifyTrack) {
-    setTrack(track);
-    assignSelectedTrack(track);
-  }
+  const track = useStore(currentTrack);
+
+  console.log({ track });
   return (
     <div>
       <div className="mb-5">
@@ -33,7 +32,7 @@ function TrackDisplay() {
         )}
       </div>
 
-      <TrackSearch onTrackSelect={handleTrackSelection} />
+      <TrackSearch />
     </div>
   );
 }
