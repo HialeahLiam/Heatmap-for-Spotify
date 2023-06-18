@@ -112,11 +112,9 @@ export const footerData = {
     { text: 'Privacy Policy', href: getPermalink('/privacy') },
   ],
   socialLinks: [
-    { ariaLabel: 'Twitter', icon: 'tabler:brand-twitter', href: '#' },
-    { ariaLabel: 'Instagram', icon: 'tabler:brand-instagram', href: '#' },
-    { ariaLabel: 'Facebook', icon: 'tabler:brand-facebook', href: '#' },
-    { ariaLabel: 'RSS', icon: 'tabler:rss', href: getAsset('/rss') },
-    { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/onwidget/astrowind' },
+    { ariaLabel: 'LinkedIn', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/in/liam-idrovo/' },
+    { ariaLabel: 'Twitter', icon: 'tabler:brand-twitter', href: 'https://twitter.com/IdrovoLiam' },
+    { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/HialeahLiam' },
   ],
   footNote: `
     Made by <a class="text-blue-600 hover:underline dark:text-gray-200" href="#"> Liam Idrovo</a> · All rights reserved.
