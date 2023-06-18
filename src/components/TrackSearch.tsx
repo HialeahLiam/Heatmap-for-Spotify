@@ -40,7 +40,6 @@ const TrackSearch = () => {
 
   function handleTrackSelection(track: SpotifyTrack) {
     selectedTrack.set(track);
-    console.log('selected tack set!');
     setTrack(track.name);
   }
 

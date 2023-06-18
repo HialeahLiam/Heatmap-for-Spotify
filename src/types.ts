@@ -68,6 +68,9 @@ export interface SpotifyTrack {
   href: string;
   id: string;
   uri: string;
+  external_urls: {
+    spotify?: string;
+  };
 }
 
 export interface FloatingTextElement extends HTMLElement {

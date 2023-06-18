@@ -17,6 +17,7 @@ function TrackDisplay() {
             image={track.album.images[0].url}
             artists={track.artists}
             album={track.album.name}
+            trackUrl={track.external_urls.spotify}
           ></Track>
         ) : (
           <>
