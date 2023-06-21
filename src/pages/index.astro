@@ -17,20 +17,26 @@ const meta = {
 
   import { getSpotifyAuthToken } from '~/utils/auth';
   import { getTrackSegments, playTrack } from '~/utils/spotifyWebApi';
+  import { isUserPremium } from '../utils/isUserPremium';
 
   let segments = null;
   let currentTrackId = null;
-  if (!(await getSpotifyAuthToken())) {
+  let spotifyToken = await getSpotifyAuthToken();
+  if (!spotifyToken) {
     // dev
     // window.location.replace(`${import.meta.env.PUBLIC_DEV_URL}/login`);
     window.location.replace(`/login`);
+  }
+
+  if (spotifyToken && !(await isUserPremium(spotifyToken))) {
+    window.location.replace('/not-premium');
   }
 
   async function refreshPitchSegments(trackId) {
     segments = await getTrackSegments(trackId);
   }
 
-  let accessToken = (await getSpotifyAuthToken())?.accessToken;
+  let accessToken = spotifyToken?.accessToken;
   let spotifyDeviceId = null;
 
   let playbackObserverTimer: number | undefined;
