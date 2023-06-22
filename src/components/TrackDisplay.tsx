@@ -3,12 +3,14 @@ import { SpotifyTrack } from '~/types';
 import TrackSearch from './TrackSearch';
 import Track from './widgets/Track';
 import { useStore } from '@nanostores/react';
-import { currentTrack, selectedTrack } from '~/trackStore';
+import { currentTrack } from '~/trackStore';
 
 function TrackDisplay() {
   const track = useStore(currentTrack);
 
-  console.log({ track });
+  console.log({ track }, 'current track');
+
+  // console.log({ track });
 
   return (
     <div>
@@ -19,7 +21,7 @@ function TrackDisplay() {
             image={track.album.images[0].url}
             artists={track.artists}
             album={track.album.name}
-            trackUrl={track.external_urls.spotify}
+            trackUrl={track.external_urls?.spotify}
           ></Track>
         ) : (
           <>
