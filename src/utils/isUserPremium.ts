@@ -11,7 +11,6 @@ export const isUserPremium = async (token: SpotifyToken) => {
     if (!response.ok) return false;
     const { product } = await response.json();
 
-    console.log({ product });
     return product === 'premium';
   } catch (error) {
     console.log({ error });
