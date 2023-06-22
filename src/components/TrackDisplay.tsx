@@ -8,6 +8,8 @@ import { currentTrack, selectedTrack } from '~/trackStore';
 function TrackDisplay() {
   const track = useStore(currentTrack);
 
+  console.log({ track });
+
   return (
     <div>
       <div className="mb-5">
